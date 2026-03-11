@@ -4,7 +4,7 @@ import FollowingPage from "./pages/FollowingPage";
 import SpacePage from "./pages/SpacePage";
 import Homepage from "./pages/Homepage";
 import QuestionDetail from "./components/QuestionDetail";
-import { SignIn, SignUp, SignedIn, SignedOut, useUser } from "@clerk/clerk-react";
+import { SignIn, SignUp, SignedIn, SignedOut, useUser, useAuth } from "@clerk/clerk-react";
 import CreateQuestionModal from "./components/CreateQuestionModal";
 
 import { Question, User as LocalUser } from "./types";
@@ -19,6 +19,7 @@ const THEME_KEY = "codevirus_theme";
 
 const App: React.FC = () => {
   const { user: clerkUser, isLoaded } = useUser();
+  const { getToken } = useAuth();
 
   const [theme, setTheme] = useState<"light" | "dark">(() => {
     const savedTheme = localStorage.getItem(THEME_KEY);
@@ -60,7 +61,7 @@ const App: React.FC = () => {
     const fetchProfile = async () => {
       if (clerkUser) {
         try {
-          const token = await (window as any).Clerk?.session?.getToken();
+          const token = await getToken();
           const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/auth/me`, {
             headers: { Authorization: `Bearer ${token}` }
           });
@@ -78,7 +79,7 @@ const App: React.FC = () => {
       }
     };
     fetchProfile();
-  }, [clerkUser]);
+  }, [clerkUser, getToken]);
 
   useEffect(() => {
     localStorage.setItem(THEME_KEY, theme);
@@ -87,7 +88,7 @@ const App: React.FC = () => {
 
   const handleToggleRole = async () => {
     try {
-      const token = await (window as any).Clerk?.session?.getToken();
+      const token = await getToken();
       const response = await axios.post(`${import.meta.env.VITE_API_URL}/api/auth/toggle-role`, {}, {
         headers: { Authorization: `Bearer ${token}` }
       });
@@ -95,7 +96,8 @@ const App: React.FC = () => {
         ...localUserProfile!,
         role: response.data.role
       });
-      alert(`Role switched to: ${response.data.role}`);
+      // Removing alert for better UX, using state feedback instead
+      console.log(`Role switched to: ${response.data.role}`);
     } catch (e) {
       console.error("Failed to toggle role", e);
     }
