@@ -26,6 +26,7 @@ const App: React.FC = () => {
   });
 
   const [questions, setQuestions] = useState<Question[]>([]);
+  const [localUserProfile, setLocalUserProfile] = useState<LocalUser | null>(null);
 
   const [searchQuery, setSearchQuery] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -39,7 +40,8 @@ const App: React.FC = () => {
   const currentUser: LocalUser | null = clerkUser ? {
     id: clerkUser.id,
     name: clerkUser.username || clerkUser.firstName || "User",
-    avatar: clerkUser.imageUrl
+    avatar: clerkUser.imageUrl,
+    role: localUserProfile?.role || 'user'
   } : null;
 
   useEffect(() => {
@@ -53,6 +55,30 @@ const App: React.FC = () => {
     };
     fetchQuestions();
   }, []);
+
+  useEffect(() => {
+    const fetchProfile = async () => {
+      if (clerkUser) {
+        try {
+          const token = await (window as any).Clerk?.session?.getToken();
+          const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/auth/me`, {
+            headers: { Authorization: `Bearer ${token}` }
+          });
+          setLocalUserProfile({
+            id: response.data._id,
+            name: response.data.name || clerkUser.firstName || "User",
+            avatar: clerkUser.imageUrl,
+            role: response.data.role
+          });
+        } catch (error) {
+          console.error("Failed to fetch local profile:", error);
+        }
+      } else {
+        setLocalUserProfile(null);
+      }
+    };
+    fetchProfile();
+  }, [clerkUser]);
 
   useEffect(() => {
     localStorage.setItem(THEME_KEY, theme);
