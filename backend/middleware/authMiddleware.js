@@ -11,13 +11,16 @@ export const protect = async (req, res, next) => {
     console.log("Clerk Auth UserId:", userId);
 
     // Find or create user in MongoDB based on Clerk ID
-    let user = await User.findOne({ email: userId });
+    let user = await User.findOne({ clerkId: userId });
 
     if (!user) {
       console.log("Creating new user for Clerk ID:", userId);
       // Create a default user if not found
+      // Since we don't have the email from getAuth(req) directly without Clerk Client
+      // we'll use the clerkId as a placeholder email for now or try to fetch it
       user = await User.create({
-        email: userId,
+        email: `${userId}@clerk.user`, // Fallback email
+        clerkId: userId,
         role: "user"
       });
     }

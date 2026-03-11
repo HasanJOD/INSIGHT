@@ -7,6 +7,8 @@ interface NavbarProps {
   onSearch: (query: string) => void;
   theme: "light" | "dark";
   onToggleTheme: () => void;
+  onToggleRole?: () => void;
+  userRole?: string;
 }
 
 const Navbar: React.FC<NavbarProps> = ({
@@ -14,6 +16,8 @@ const Navbar: React.FC<NavbarProps> = ({
   onSearch,
   theme,
   onToggleTheme,
+  onToggleRole,
+  userRole
 }) => {
   const location = useLocation();
 
@@ -50,8 +54,8 @@ const Navbar: React.FC<NavbarProps> = ({
                 key={link.to}
                 to={link.to}
                 className={`relative px-4 py-2 rounded-xl text-sm font-semibold transition-all duration-300 flex items-center gap-2 ${location.pathname === link.to
-                    ? "text-blue-600 bg-blue-50/50 dark:bg-blue-900/20"
-                    : "text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-200 hover:bg-slate-100/50 dark:hover:bg-slate-800/50"
+                  ? "text-blue-600 bg-blue-50/50 dark:bg-blue-900/20"
+                  : "text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-200 hover:bg-slate-100/50 dark:hover:bg-slate-800/50"
                   }`}
               >
                 <i className={`fa-solid ${link.icon} text-base`}></i>
@@ -74,8 +78,8 @@ const Navbar: React.FC<NavbarProps> = ({
             placeholder="Search insights..."
             onChange={(e) => onSearch(e.target.value)}
             className={`w-full pl-11 pr-4 py-2.5 rounded-2xl border text-sm transition-all ${theme === "dark"
-                ? "bg-slate-900/40 border-slate-800/60 text-white placeholder-slate-500 group-hover:border-slate-700"
-                : "bg-slate-100/40 border-slate-200 text-slate-900 placeholder-slate-400 group-hover:border-slate-300"
+              ? "bg-slate-900/40 border-slate-800/60 text-white placeholder-slate-500 group-hover:border-slate-700"
+              : "bg-slate-100/40 border-slate-200 text-slate-900 placeholder-slate-400 group-hover:border-slate-300"
               } focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:bg-white dark:focus:bg-slate-900 focus:border-blue-500`}
           />
         </div>
@@ -86,14 +90,25 @@ const Navbar: React.FC<NavbarProps> = ({
           <button
             onClick={onToggleTheme}
             className={`w-10 h-10 rounded-xl flex items-center justify-center transition-all duration-300 ${theme === "dark"
-                ? "bg-slate-800 text-yellow-400 hover:bg-slate-700 hover:shadow-lg hover:shadow-yellow-500/10"
-                : "bg-slate-100 text-slate-600 hover:bg-slate-200 hover:shadow-lg"
+              ? "bg-slate-800 text-yellow-400 hover:bg-slate-700 hover:shadow-lg hover:shadow-yellow-500/10"
+              : "bg-slate-100 text-slate-600 hover:bg-slate-200 hover:shadow-lg"
               }`}
           >
             <i className={`fa-solid ${theme === "dark" ? "fa-sun" : "fa-moon"} text-lg`}></i>
           </button>
 
           <SignedIn>
+            <button
+              onClick={onToggleRole}
+              className={`hidden sm:flex items-center gap-2 px-3 py-2 text-xs font-bold rounded-xl transition-all border ${userRole === 'expert'
+                  ? "bg-purple-600 border-purple-500 text-white"
+                  : "bg-slate-100 border-slate-200 text-slate-600 dark:bg-slate-800 dark:border-slate-700 dark:text-slate-400"
+                }`}
+            >
+              <i className={`fa-solid ${userRole === 'expert' ? 'fa-user-tie' : 'fa-user'}`}></i>
+              {userRole === 'expert' ? 'Expert Mode' : 'Switch to Expert'}
+            </button>
+
             <button
               onClick={onOpenModal}
               className="hidden sm:flex items-center gap-2 px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white text-sm font-bold rounded-xl transition-all shadow-lg shadow-blue-600/20 hover:shadow-blue-600/40 hover:-translate-y-0.5 active:translate-y-0"

@@ -85,6 +85,22 @@ const App: React.FC = () => {
     document.documentElement.classList.toggle("dark", theme === "dark");
   }, [theme]);
 
+  const handleToggleRole = async () => {
+    try {
+      const token = await (window as any).Clerk?.session?.getToken();
+      const response = await axios.post(`${import.meta.env.VITE_API_URL}/api/auth/toggle-role`, {}, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      setLocalUserProfile({
+        ...localUserProfile!,
+        role: response.data.role
+      });
+      alert(`Role switched to: ${response.data.role}`);
+    } catch (e) {
+      console.error("Failed to toggle role", e);
+    }
+  };
+
   const handleAddQuestion = (newQuestion: Question) => {
     setQuestions((prev) => [newQuestion, ...prev]);
   };
@@ -120,7 +136,9 @@ const App: React.FC = () => {
         onOpenModal={() => openModal("ask")}
         onSearch={setSearchQuery}
         theme={theme}
-        onToggleTheme={toggleTheme}
+        onToggleTheme={() => setTheme(theme === 'light' ? 'dark' : 'light')}
+        onToggleRole={handleToggleRole}
+        userRole={currentUser?.role}
       />
 
       <Routes>
