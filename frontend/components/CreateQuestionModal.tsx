@@ -24,7 +24,7 @@ const CreateQuestionModal: React.FC<CreateQuestionModalProps> = ({
   const [content, setContent] = useState("");
   const [topic, setTopic] = useState("Malware Analysis");
   const [isGeneratingImage, setIsGeneratingImage] = useState(false);
-  const [duplicateData, setDuplicateData] = useState<{ suggestedResponse: string; existingQuestion: Question } | null>(null);
+  const [autoResolvedData, setAutoResolvedData] = useState<{ expertResponse: string; topic: string } | null>(null);
   const { getToken } = useAuth();
 
   const handleSubmit = async (bypass: boolean = false) => {
@@ -49,11 +49,12 @@ const CreateQuestionModal: React.FC<CreateQuestionModalProps> = ({
         }
       );
 
-      if (response.data.existingQuestion) {
-        setDuplicateData({
-          suggestedResponse: response.data.suggestedResponse,
-          existingQuestion: response.data.existingQuestion
+      if (response.data.autoResolved) {
+        setAutoResolvedData({
+          expertResponse: response.data.expertResponse,
+          topic: response.data.topic
         });
+        onSubmit(response.data);
       } else {
         onSubmit(response.data);
         onClose();
@@ -89,49 +90,35 @@ const CreateQuestionModal: React.FC<CreateQuestionModalProps> = ({
         {/* Accent Line */}
         <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-blue-500 via-indigo-500 to-violet-500"></div>
 
-        {duplicateData ? (
-          <div className="animate-fade-in">
-            <div className={`p-6 rounded-3xl border-l-[6px] mb-8 relative overflow-hidden group/dupe ${theme === 'dark' ? 'bg-emerald-950/20 border-emerald-500' : 'bg-emerald-50 border-emerald-500'}`}>
-              <div className="absolute top-0 right-0 p-4 opacity-5 group-hover/dupe:opacity-10 transition-opacity">
-                <i className="fa-solid fa-clone text-6xl text-emerald-500"></i>
-              </div>
+        {autoResolvedData ? (
+          <div className="animate-fade-in text-center py-6">
+            <div className="w-20 h-20 bg-emerald-500 rounded-3xl flex items-center justify-center mx-auto mb-6 shadow-2xl shadow-emerald-500/40 animate-bounce-subtle">
+              <i className="fa-solid fa-check-double text-3xl text-white"></i>
+            </div>
 
-              <div className="flex items-center gap-3 mb-4">
-                <div className="w-10 h-10 rounded-xl bg-emerald-500 flex items-center justify-center shadow-xl shadow-emerald-500/30">
-                  <i className="fa-solid fa-robot text-sm text-white"></i>
-                </div>
-                <div>
-                  <h3 className="text-xs font-black uppercase tracking-[0.2em] text-emerald-600 dark:text-emerald-400">
-                    Similarity Detected
-                  </h3>
-                  <p className="text-[10px] font-bold text-emerald-500/60 uppercase tracking-widest leading-none mt-1">Found in Security Database</p>
-                </div>
-              </div>
+            <h2 className={`text-2xl font-black font-outfit mb-2 ${theme === 'dark' ? 'text-white' : 'text-slate-900'}`}>
+              Automatically Resolved!
+            </h2>
+            <p className={`text-sm mb-8 font-bold px-4 ${theme === 'dark' ? 'text-slate-400' : 'text-slate-500'}`}>
+              Our system identified this as a known issue and has automatically attached a verified expert solution.
+            </p>
 
-              <p className={`text-sm mb-5 font-bold leading-relaxed ${theme === 'dark' ? 'text-slate-200' : 'text-slate-700'}`}>
-                A technical expert has already addressed this inquiry. Here is the verified solution:
+            <div className={`p-6 rounded-3xl border-l-[6px] mb-8 text-left relative overflow-hidden group/success-dupe ${theme === 'dark' ? 'bg-emerald-950/20 border-emerald-500' : 'bg-emerald-50 border-emerald-500'}`}>
+              <div className="flex items-center gap-2 mb-3">
+                <i className="fa-solid fa-shield-check text-emerald-500"></i>
+                <span className="text-[10px] font-black uppercase tracking-widest text-emerald-600/80">Verified Resolution</span>
+              </div>
+              <p className={`text-sm leading-relaxed font-semibold ${theme === 'dark' ? 'text-slate-200' : 'text-slate-800'}`}>
+                {autoResolvedData.expertResponse}
               </p>
-
-              <div className={`p-5 rounded-[1.5rem] text-sm leading-relaxed border font-medium relative z-10 ${theme === 'dark' ? 'bg-slate-950/50 border-slate-800 text-slate-300' : 'bg-white border-slate-200 text-slate-600'}`}>
-                {duplicateData.suggestedResponse}
-              </div>
             </div>
 
-            <div className="flex flex-col gap-3 font-black">
-              <button
-                onClick={onClose}
-                className="w-full py-4 bg-emerald-600 hover:bg-emerald-700 text-white rounded-[1.5rem] transition-all shadow-xl shadow-emerald-500/20 text-sm uppercase tracking-widest"
-              >
-                Accept Resolution & Exit
-              </button>
-              <button
-                onClick={() => handleSubmit(true)}
-                className={`w-full py-4 rounded-[1.5rem] transition-all border text-sm uppercase tracking-widest ${theme === 'dark' ? 'bg-slate-800 border-slate-700 text-slate-400 hover:bg-slate-700 hover:text-white' : 'bg-slate-100 border-slate-200 text-slate-500 hover:bg-slate-200'
-                  }`}
-              >
-                Not Quite, Post My Inquiry
-              </button>
-            </div>
+            <button
+              onClick={onClose}
+              className="w-full py-4 bg-gradient-to-br from-emerald-500 to-green-600 hover:from-emerald-600 hover:to-green-700 text-white rounded-2xl transition-all shadow-xl shadow-emerald-500/30 text-sm font-black uppercase tracking-widest"
+            >
+              Great, thanks!
+            </button>
           </div>
         ) : (
           <>
@@ -223,8 +210,13 @@ const CreateQuestionModal: React.FC<CreateQuestionModalProps> = ({
                     from { opacity: 0; transform: scale(0.95) translateY(10px); }
                     to { opacity: 1; transform: scale(1) translateY(0); }
                 }
+                @keyframes bounce-subtle {
+                    0%, 100% { transform: translateY(0); }
+                    50% { transform: translateY(-10px); }
+                }
                 .animate-fade-in { animation: fade-in 0.3s ease-out forwards; }
                 .animate-scale-in { animation: scale-in 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards; }
+                .animate-bounce-subtle { animation: bounce-subtle 2s ease-in-out infinite; }
             `}</style>
 
     </div>,

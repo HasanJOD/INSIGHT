@@ -24,20 +24,34 @@ export const createQuestion = async (req, res) => {
 
     // Check for duplicates (safer search)
     const normalizedTitle = title.trim();
-    if (!req.body.bypassDeduplication) {
-      const existingQuestion = await Question.findOne({
-        title: { $regex: new RegExp(normalizedTitle.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i') },
-        status: "answered"
-      }).sort({ createdAt: -1 });
+    const existingQuestion = await Question.findOne({
+      title: { $regex: new RegExp(`^${normalizedTitle.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}$`, 'i') },
+      status: "answered"
+    }).sort({ createdAt: -1 });
 
-      if (existingQuestion) {
-        console.log("Duplicate found:", existingQuestion._id);
-        return res.status(200).json({
-          message: "A similar issue was previously answered.",
-          existingQuestion,
-          suggestedResponse: existingQuestion.expertResponse || "No specific response found, but this topic has been covered."
-        });
-      }
+    if (existingQuestion && !req.body.bypassDeduplication) {
+      console.log("Automatic Resolution Found:", existingQuestion._id);
+
+      // Classify the issue (reuse or re-classify)
+      const category = classifyIssue(title, content);
+
+      // Create the question but with existing expert response
+      const question = await Question.create({
+        title,
+        content,
+        topic,
+        category,
+        imageUrl: imageUrl || "",
+        author: req.user?._id,
+        expertResponse: existingQuestion.expertResponse,
+        status: "answered"
+      });
+
+      return res.status(201).json({
+        ...question._doc,
+        autoResolved: true,
+        originalResolutionId: existingQuestion._id
+      });
     }
 
     // Classify the issue
