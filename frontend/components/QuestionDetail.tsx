@@ -180,8 +180,8 @@ const QuestionDetail: React.FC<QuestionDetailProps> = ({ questions, onUpdate, cu
         {/* Expert Response Section */}
         {question.expertResponse && (
           <div className={`mb-8 p-6 rounded-3xl border-l-[6px] shadow-xl relative overflow-hidden group/detail-expert ${theme === 'dark'
-              ? 'bg-emerald-950/30 border-emerald-500/60 text-emerald-50'
-              : 'bg-emerald-50 border-emerald-200 text-emerald-900'
+            ? 'bg-emerald-950/30 border-emerald-500/60 text-emerald-50'
+            : 'bg-emerald-50 border-emerald-200 text-emerald-900'
             }`}>
             <div className="absolute top-0 right-0 p-4 opacity-5 group-hover/detail-expert:opacity-10 transition-opacity">
               <i className="fa-solid fa-certificate text-6xl"></i>
@@ -228,7 +228,7 @@ const QuestionDetail: React.FC<QuestionDetailProps> = ({ questions, onUpdate, cu
               className="px-8 py-3.5 bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white font-black rounded-2xl transition-all shadow-xl shadow-green-600/30 hover:-translate-y-1 active:scale-95 flex items-center gap-2"
             >
               <i className="fa-solid fa-plus-circle"></i>
-              Provide Resolution
+              Post Solution
             </button>
           </div>
         )}

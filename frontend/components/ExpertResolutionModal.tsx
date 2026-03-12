@@ -62,14 +62,15 @@ const ExpertResolutionModal: React.FC<ExpertResolutionModalProps> = ({ isOpen, o
                         </button>
                         <button
                             onClick={() => {
-                                if (response.trim()) {
-                                    onSubmit(response);
-                                    setResponse('');
-                                    onClose();
+                                if (!response.trim()) {
+                                    alert("Please enter a resolution before posting.");
+                                    return;
                                 }
+                                onSubmit(response);
+                                setResponse('');
+                                onClose();
                             }}
-                            disabled={!response.trim()}
-                            className="flex-[2] px-8 py-3 bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white font-bold rounded-2xl transition-all shadow-lg shadow-green-500/20 disabled:opacity-50 disabled:cursor-not-allowed transform hover:-translate-y-0.5 active:translate-y-0"
+                            className="flex-[2] px-8 py-3 bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white font-bold rounded-2xl transition-all shadow-lg shadow-green-500/20 transform hover:-translate-y-0.5 active:translate-y-0"
                         >
                             Post Solution
                         </button>
