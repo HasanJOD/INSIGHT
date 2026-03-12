@@ -8,9 +8,10 @@ interface FeedProps {
   onOpenModal: (mode: "ask" | "analyze" | "broadcast") => void;
   user: User | null;
   onDelete: (id: string) => void;
+  onUpdate: (q: Question) => void;
 }
 
-const Feed: React.FC<FeedProps> = ({ questions = [], theme, onOpenModal, user, onDelete }) => {
+const Feed: React.FC<FeedProps> = ({ questions = [], theme, onOpenModal, user, onDelete, onUpdate }) => {
 
   const handleAsk = () => onOpenModal("ask");
   const handleAnalyze = () => onOpenModal("analyze");

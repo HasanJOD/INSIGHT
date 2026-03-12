@@ -14,6 +14,7 @@ interface Props {
   onSearchChange: (q: string) => void;
   onOpenModal: (mode: "ask" | "analyze" | "broadcast") => void;
   onDelete: (id: string) => void;
+  onUpdate: (q: Question) => void;
 }
 
 const Homepage: React.FC<Props> = ({
@@ -22,7 +23,8 @@ const Homepage: React.FC<Props> = ({
   questions,
   onSearchChange,
   onOpenModal,
-  onDelete
+  onDelete,
+  onUpdate
 }) => {
   return (
     <main className="max-w-6xl mx-auto pt-20 px-4 flex gap-6">
