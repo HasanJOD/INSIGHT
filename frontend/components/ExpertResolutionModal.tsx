@@ -42,8 +42,8 @@ const ExpertResolutionModal: React.FC<ExpertResolutionModalProps> = ({ isOpen, o
 
                     <textarea
                         className={`w-full p-4 rounded-2xl border text-sm focus:outline-none focus:ring-4 focus:ring-green-500/20 focus:border-green-500 transition-all min-h-[160px] ${theme === 'dark'
-                                ? 'bg-slate-950 border-slate-700 text-white placeholder-slate-600'
-                                : 'bg-slate-50 border-slate-200 text-slate-900'
+                            ? 'bg-slate-950 border-slate-700 text-white placeholder-slate-600'
+                            : 'bg-slate-50 border-slate-200 text-slate-900'
                             }`}
                         placeholder="Write your definitive solution here..."
                         value={response}
@@ -54,8 +54,8 @@ const ExpertResolutionModal: React.FC<ExpertResolutionModalProps> = ({ isOpen, o
                         <button
                             onClick={onClose}
                             className={`flex-1 py-3 font-bold rounded-2xl transition-all ${theme === 'dark'
-                                    ? 'bg-slate-800 text-slate-300 hover:bg-slate-700'
-                                    : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                                ? 'bg-slate-800 text-slate-300 hover:bg-slate-700'
+                                : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
                                 }`}
                         >
                             Cancel
@@ -69,9 +69,9 @@ const ExpertResolutionModal: React.FC<ExpertResolutionModalProps> = ({ isOpen, o
                                 }
                             }}
                             disabled={!response.trim()}
-                            className="flex-3 px-8 py-3 bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white font-bold rounded-2xl transition-all shadow-lg shadow-green-500/20 disabled:opacity-50 disabled:cursor-not-allowed transform hover:-translate-y-0.5 active:translate-y-0"
+                            className="flex-[2] px-8 py-3 bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white font-bold rounded-2xl transition-all shadow-lg shadow-green-500/20 disabled:opacity-50 disabled:cursor-not-allowed transform hover:-translate-y-0.5 active:translate-y-0"
                         >
-                            Post Resolution
+                            Post Solution
                         </button>
                     </div>
                 </div>
