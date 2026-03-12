@@ -91,6 +91,7 @@ const Feed: React.FC<FeedProps> = ({ questions = [], theme, onOpenModal, user, o
           theme={theme}
           currentUser={user}
           onDelete={onDelete}
+          onUpdate={onUpdate}
         />
       ))}
 

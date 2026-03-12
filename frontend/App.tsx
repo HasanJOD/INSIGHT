@@ -197,6 +197,7 @@ const App: React.FC = () => {
               onSearchChange={setSearchQuery}
               onOpenModal={openModal}
               onDelete={handleDeleteQuestion}
+              onUpdate={handleUpdateQuestion}
             />
           }
         />

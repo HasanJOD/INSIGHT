@@ -40,6 +40,7 @@ const Homepage: React.FC<Props> = ({
           onOpenModal={onOpenModal}
           user={user}
           onDelete={onDelete}
+          onUpdate={onUpdate}
         />
       </div>
 
