@@ -42,6 +42,7 @@ const App: React.FC = () => {
     id: clerkUser.id,
     name: clerkUser.username || clerkUser.firstName || "User",
     avatar: clerkUser.imageUrl,
+    role: localUserProfile?.role || 'user'
   } : null;
 
   useEffect(() => {
