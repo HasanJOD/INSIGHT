@@ -172,7 +172,31 @@ const QuestionCard: React.FC<QuestionCardProps> = ({ question, theme, currentUse
           </div>
         )}
 
-        {topAnswer && (
+        {question.expertResponse && (
+          <div
+            className={`p-5 rounded-3xl border-l-4 mb-5 shadow-lg relative overflow-hidden group/expert-box ${theme === 'dark'
+              ? 'bg-emerald-950/20 border-emerald-500/50 text-emerald-100'
+              : 'bg-emerald-50 border-emerald-200 text-emerald-900'
+              }`}
+          >
+            <div className="absolute top-0 right-0 p-3 opacity-10 group-hover/expert-box:opacity-20 transition-opacity">
+              <i className="fa-solid fa-shield-check text-4xl"></i>
+            </div>
+            <div className="flex items-center gap-2 mb-2.5">
+              <div className="w-6 h-6 rounded-lg bg-emerald-500 flex items-center justify-center shadow-lg shadow-emerald-500/20">
+                <i className="fa-solid fa-user-tie text-[10px] text-white"></i>
+              </div>
+              <span className="text-[10px] font-black uppercase tracking-[0.2em] flex items-center gap-1.5 font-outfit">
+                Definitive Resolution
+              </span>
+            </div>
+            <p className="text-sm leading-relaxed font-semibold relative z-10">
+              {question.expertResponse}
+            </p>
+          </div>
+        )}
+
+        {topAnswer && !question.expertResponse && (
           <div
             className={`p-4 rounded-2xl border-l-4 mb-5 shadow-sm ${theme === 'dark'
               ? 'bg-slate-800/30 border-slate-700 border-l-blue-500'

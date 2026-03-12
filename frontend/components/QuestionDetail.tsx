@@ -179,11 +179,20 @@ const QuestionDetail: React.FC<QuestionDetailProps> = ({ questions, onUpdate, cu
 
         {/* Expert Response Section */}
         {question.expertResponse && (
-          <div className={`mb-6 p-4 rounded-lg border-l-4 border-green-500 ${theme === 'dark' ? 'bg-green-950/20 border-green-900/40 text-green-100' : 'bg-green-50 border-green-100 text-green-900'}`}>
-            <h4 className="text-xs font-bold uppercase tracking-widest mb-2 flex items-center gap-2">
-              <i className="fa-solid fa-user-check"></i> Expert Response
+          <div className={`mb-8 p-6 rounded-3xl border-l-[6px] shadow-xl relative overflow-hidden group/detail-expert ${theme === 'dark'
+              ? 'bg-emerald-950/30 border-emerald-500/60 text-emerald-50'
+              : 'bg-emerald-50 border-emerald-200 text-emerald-900'
+            }`}>
+            <div className="absolute top-0 right-0 p-4 opacity-5 group-hover/detail-expert:opacity-10 transition-opacity">
+              <i className="fa-solid fa-certificate text-6xl"></i>
+            </div>
+            <h4 className="text-xs font-black uppercase tracking-[0.3em] mb-4 flex items-center gap-2.5 font-outfit">
+              <div className="w-7 h-7 bg-emerald-500 rounded-xl flex items-center justify-center shadow-xl shadow-emerald-500/30">
+                <i className="fa-solid fa-user-check text-xs text-white"></i>
+              </div>
+              Official Expert Resolution
             </h4>
-            <p className="text-sm leading-relaxed">{question.expertResponse}</p>
+            <p className="text-base leading-relaxed font-semibold relative z-10">{question.expertResponse}</p>
           </div>
         )}
 
